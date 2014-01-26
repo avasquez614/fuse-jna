@@ -326,51 +326,42 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 
 	private void log(final String methodName, final LoggedVoidMethod method)
 	{
-		log(methodName, method, null, (Object[]) null);
+		log(methodName, method, (Object[]) null);
 	}
 
-	private void log(final String methodName, final LoggedVoidMethod method, final String path, final Object... args)
+	private void log(final String methodName, final LoggedVoidMethod method, final Object... args)
 	{
+        actualLogger.entering(className, methodName, args);
 		try {
-			actualLogger.entering(className, methodName, args);
 			method.invoke();
-			actualLogger.logp(Level.INFO, className, methodName, (path == null ? "" : "[" + path + "] ") + methodSuccess, args);
 			actualLogger.exiting(className, methodName, args);
 		}
 		catch (final Throwable e) {
-			logException(e, methodName, null, args);
+			logException(e, methodName, null);
 		}
 	}
 
 	private <T> T log(final String methodName, final T defaultValue, final LoggedMethod<T> method)
 	{
-		return log(methodName, defaultValue, method, null, (Object[]) null);
+		return log(methodName, defaultValue, method, (Object[]) null);
 	}
 
-	private <T> T log(final String methodName, final T defaultValue, final LoggedMethod<T> method, final String path,
-			final Object... args)
+	private <T> T log(final String methodName, final T defaultValue, final LoggedMethod<T> method, final Object... args)
 	{
+        actualLogger.entering(className, methodName, args);
 		try {
-			actualLogger.entering(className, methodName, args);
 			final T result = method.invoke();
-			actualLogger.logp(Level.INFO, className, methodName, (path == null ? "" : "[" + path + "] ") + methodSuccess
-					+ methodResult + result, args);
-			actualLogger.exiting(className, methodName, args);
+			actualLogger.exiting(className, methodName, result);
 			return result;
 		}
 		catch (final Throwable e) {
-			return logException(e, methodName, defaultValue, args);
+			return logException(e, methodName, defaultValue);
 		}
 	}
 
-	private <T> T logException(final Throwable e, final String methodName, final T defaultValue, final Object... args)
+	private <T> T logException(final Throwable e, final String methodName, final T defaultValue)
 	{
-		final StackTraceElement[] stack = e.getStackTrace();
-		final StringBuilder builder = new StringBuilder();
-		for (final StackTraceElement element : stack) {
-			builder.append("\n" + element);
-		}
-		actualLogger.logp(Level.SEVERE, className, methodName, methodFailure + e + builder.toString(), args);
+		actualLogger.throwing(className, methodName, e);
 		return defaultValue;
 	}
 
