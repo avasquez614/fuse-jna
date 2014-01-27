@@ -324,26 +324,16 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 		}, path, info, command, flock);
 	}
 
-	private void log(final String methodName, final LoggedVoidMethod method)
-	{
-		log(methodName, method, (Object[]) null);
-	}
-
 	private void log(final String methodName, final LoggedVoidMethod method, final Object... args)
 	{
         actualLogger.entering(className, methodName, args);
 		try {
 			method.invoke();
-			actualLogger.exiting(className, methodName, args);
+			actualLogger.exiting(className, methodName, null);
 		}
 		catch (final Throwable e) {
 			logException(e, methodName, null);
 		}
-	}
-
-	private <T> T log(final String methodName, final T defaultValue, final LoggedMethod<T> method)
-	{
-		return log(methodName, defaultValue, method, (Object[]) null);
 	}
 
 	private <T> T log(final String methodName, final T defaultValue, final LoggedMethod<T> method, final Object... args)
