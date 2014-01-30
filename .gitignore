@@ -10,3 +10,5 @@ gradle
 *.iws
 *.iml
 build
+*.iml
+.idea

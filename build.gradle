@@ -6,6 +6,7 @@ repositories {
 }
 
 dependencies {
+    compile 'ch.qos.logback:logback-classic:1.0.13'
 	compile 'net.java.dev.jna:jna:3.5.2'
 }
 

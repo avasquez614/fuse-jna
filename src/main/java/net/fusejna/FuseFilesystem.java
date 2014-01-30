@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.BufferOverflowException;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import net.fusejna.StructFlock.FlockWrapper;
@@ -26,6 +25,8 @@ import net.fusejna.types.TypeUid;
 
 import com.sun.jna.Function;
 import com.sun.jna.Pointer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class FuseFilesystem
 {
@@ -374,9 +375,6 @@ public abstract class FuseFilesystem
 	/**
 	 * Subclasses may override this to customize the default parameters applied to the stat structure, or to prevent such
 	 * behavior (by overriding this method with an empty one)
-	 * 
-	 * @param stat
-	 *            The
 	 */
 	protected void defaultStat(final StatWrapper wrapper, final long uid, final long gid)
 	{
@@ -507,7 +505,7 @@ public abstract class FuseFilesystem
 
 	protected final FuseFilesystem log(final boolean logging)
 	{
-		return log(logging ? Logger.getLogger(getClass().getCanonicalName()) : null);
+		return log(logging ? LoggerFactory.getLogger(getClass()) : null);
 	}
 
 	protected final FuseFilesystem log(final Logger logger)

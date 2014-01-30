@@ -2,8 +2,6 @@ package net.fusejna;
 
 import java.io.File;
 import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import net.fusejna.StructFlock.FlockWrapper;
 import net.fusejna.StructFuseFileInfo.FileInfoWrapper;
@@ -11,6 +9,8 @@ import net.fusejna.StructStat.StatWrapper;
 import net.fusejna.StructStatvfs.StatvfsWrapper;
 import net.fusejna.StructTimeBuffer.TimeBufferWrapper;
 import net.fusejna.types.TypeMode.ModeWrapper;
+import net.fusejna.util.LoggingUtils;
+import org.slf4j.Logger;
 
 final class LoggedFuseFilesystem extends FuseFilesystem
 {
@@ -24,9 +24,6 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 		public void invoke();
 	}
 
-	private static final String methodSuccess = "Method succeeded.";
-	private static final String methodFailure = "Exception thrown: ";
-	private static final String methodResult = " Result: ";
 	private final String className;
 	private final Logger actualLogger;
 	private final FuseFilesystem filesystem;
@@ -326,10 +323,10 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 
 	private void log(final String methodName, final LoggedVoidMethod method, final Object... args)
 	{
-        actualLogger.entering(className, methodName, args);
+        LoggingUtils.logMethodEnter(actualLogger, methodName, args);
 		try {
 			method.invoke();
-			actualLogger.exiting(className, methodName, null);
+			LoggingUtils.logMethodExit(actualLogger, methodName, null);
 		}
 		catch (final Throwable e) {
 			logException(e, methodName, null);
@@ -338,10 +335,10 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 
 	private <T> T log(final String methodName, final T defaultValue, final LoggedMethod<T> method, final Object... args)
 	{
-        actualLogger.entering(className, methodName, args);
+        LoggingUtils.logMethodEnter(actualLogger, methodName, args);
 		try {
 			final T result = method.invoke();
-			actualLogger.exiting(className, methodName, result);
+            LoggingUtils.logMethodExit(actualLogger, methodName, null);
 			return result;
 		}
 		catch (final Throwable e) {
@@ -351,7 +348,7 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 
 	private <T> T logException(final Throwable e, final String methodName, final T defaultValue)
 	{
-		actualLogger.throwing(className, methodName, e);
+		LoggingUtils.logException(actualLogger, methodName, e);
 		return defaultValue;
 	}
 
