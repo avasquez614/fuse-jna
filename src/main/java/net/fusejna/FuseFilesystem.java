@@ -1,32 +1,24 @@
 package net.fusejna;
 
+import com.sun.jna.Function;
+import com.sun.jna.Pointer;
+import net.fusejna.StructFlock.FlockWrapper;
+import net.fusejna.StructFuseFileInfo.FileInfoWrapper;
+import net.fusejna.StructStat.StatWrapper;
+import net.fusejna.StructStatvfs.StatvfsWrapper;
+import net.fusejna.StructTimeBuffer.TimeBufferWrapper;
+import net.fusejna.types.*;
+import net.fusejna.types.TypeMode.ModeWrapper;
+import net.fusejna.types.TypeMode.NodeType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
-
-import net.fusejna.StructFlock.FlockWrapper;
-import net.fusejna.StructFuseFileInfo.FileInfoWrapper;
-import net.fusejna.StructStat.StatWrapper;
-import net.fusejna.StructStatvfs.StatvfsWrapper;
-import net.fusejna.StructTimeBuffer.TimeBufferWrapper;
-import net.fusejna.types.TypeDev;
-import net.fusejna.types.TypeGid;
-import net.fusejna.types.TypeMode;
-import net.fusejna.types.TypeMode.ModeWrapper;
-import net.fusejna.types.TypeMode.NodeType;
-import net.fusejna.types.TypeOff;
-import net.fusejna.types.TypePid;
-import net.fusejna.types.TypeSize;
-import net.fusejna.types.TypeUInt32;
-import net.fusejna.types.TypeUid;
-
-import com.sun.jna.Function;
-import com.sun.jna.Pointer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class FuseFilesystem
 {
@@ -395,7 +387,33 @@ public abstract class FuseFilesystem
 	@UserMethod
 	public abstract int getattr(final String path, final StatWrapper stat);
 
-	/**
+    /**
+     * Returns the uid of the user that mounted the filesystem
+     *
+     * @return the uid of the user that mounted the filesystem
+     */
+    protected final int getMountUid()
+    {
+        if (!isMounted()) {
+            throw new IllegalStateException("Cannot get UID of the user that mounted the filesystem it it's not mounted.");
+        }
+        return FuseJna.getUid();
+    }
+
+    /**
+     * Returns the gid of the user that mounted the filesystem
+     *
+     * @return the gid of the user that mounted the filesystem
+     */
+    protected final int getMountGid()
+    {
+        if (!isMounted()) {
+            throw new IllegalStateException("Cannot get GID of the user that mounted the filesystem it it's not mounted.");
+        }
+        return FuseJna.getGid();
+    }
+
+    /**
 	 * Returns the raw fuse_context structure. Only valid when called while a filesystem operation is taking place.
 	 * 
 	 * @return The fuse_context structure by reference.

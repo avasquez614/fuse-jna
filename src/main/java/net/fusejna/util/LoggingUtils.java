@@ -13,7 +13,7 @@ public class LoggingUtils {
     }
 
     public static void logMethodEnter(Logger logger, String methodName, Object... params) {
-        if (logger.isTraceEnabled()) {
+        if (logger.isDebugEnabled()) {
             StringBuilder msg = new StringBuilder("Entering method '");
             msg.append(methodName).append("'");
 
@@ -31,12 +31,12 @@ public class LoggingUtils {
                 msg.append(")");
             }
 
-            logger.trace(msg.toString());
+            logger.debug(msg.toString());
         }
     }
 
     public static void logMethodExit(Logger logger, String methodName, Object result) {
-        if (logger.isTraceEnabled()) {
+        if (logger.isDebugEnabled()) {
             StringBuilder msg = new StringBuilder("Exiting method '");
             msg.append(methodName).append("'");
 
@@ -44,12 +44,12 @@ public class LoggingUtils {
                 msg.append(". Result = ").append(result);
             }
 
-            logger.trace(msg.toString());
+            logger.debug(msg.toString());
         }
     }
 
     public static void logException(Logger logger, String methodName, Throwable ex) {
-        logger.error("Method '" + methodName + "' failed", ex);
+        logger.debug("Method '" + methodName + "' failed", ex);
     }
 
 }
