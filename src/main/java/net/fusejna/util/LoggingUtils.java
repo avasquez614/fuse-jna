@@ -13,7 +13,7 @@ public class LoggingUtils {
     }
 
     public static void logMethodEnter(Logger logger, String methodName, Object... params) {
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             StringBuilder msg = new StringBuilder("Entering method '");
             msg.append(methodName).append("'");
 
@@ -31,12 +31,12 @@ public class LoggingUtils {
                 msg.append(")");
             }
 
-            logger.debug(msg.toString());
+            logger.trace(msg.toString());
         }
     }
 
     public static void logMethodExit(Logger logger, String methodName, Object result) {
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             StringBuilder msg = new StringBuilder("Exiting method '");
             msg.append(methodName).append("'");
 
@@ -44,7 +44,7 @@ public class LoggingUtils {
                 msg.append(". Result = ").append(result);
             }
 
-            logger.debug(msg.toString());
+            logger.trace(msg.toString());
         }
     }
 

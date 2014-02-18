@@ -1,9 +1,8 @@
 package net.fusejna.types;
 
-import net.fusejna.Platform;
-
 import com.sun.jna.IntegerType;
 import com.sun.jna.NativeLong;
+import net.fusejna.Platform;
 
 @SuppressWarnings("serial")
 public class TypeBlkCnt extends IntegerType
@@ -13,6 +12,8 @@ public class TypeBlkCnt extends IntegerType
 		switch (Platform.platform()) {
 			case MAC:
 			case MAC_MACFUSE:
+                size = 4;
+                break;
 			case FREEBSD:
 				size = 8;
 				break;
