@@ -357,13 +357,23 @@ public abstract class FuseFilesystem
 
 	/**
 	 * Subclasses may override this to customize the default parameters applied to the stat structure, or to prevent such
+<<<<<<< HEAD
 	 * behavior (by overriding this method with an empty one)
+=======
+	 * behavior in the first place (by overriding this method with an empty one).
+	 * 
+	 * @param wrapper
+	 *            The StatWrapper object to write to.
+	 * @param uid
+	 *            The UID under which the JVM is running.
+	 * @param gid
+	 *            The GID under which the JVM is running.
+>>>>>>> f5e47d5c9101c91bb44eb53e0cdacd01d94dcc93
 	 */
 	protected void defaultStat(final StatWrapper wrapper, final long uid, final long gid)
 	{
 		// Set some sensible defaults
-		wrapper.setMode(NodeType.DIRECTORY).setAllTimesMillis(System.currentTimeMillis()).nlink(1).uid(FuseJna.getUid())
-				.gid(FuseJna.getGid());
+		wrapper.setMode(NodeType.DIRECTORY).setAllTimesMillis(System.currentTimeMillis()).nlink(1).uid(uid).gid(gid);
 	}
 
 	@UserMethod
