@@ -41,6 +41,12 @@ The goal of fuse-jna is to bring FUSE bindings to Java with the same simplicity.
 
 To do that, it uses [JNA], which itself was inspired by Python's `ctypes` in terms of ease-of-use.
 
+#### "Help! It's too slow!"
+
+First and foremost, this library uses [JNA] for bindings, rather than [JNI]. Do not expect native performance. If you need native performance, look elsewhere.
+
+This being said, you can greatly increase throughput by preventing FUSE from chunking writes in tiny blocks, tweaking some JVM parameters, etc. See [issue 31][Issue 31] for details.
+
 #### Compatibility
 
 Following [fuse.py], fuse-jna should work with:
@@ -53,6 +59,7 @@ Following [fuse.py], fuse-jna should work with:
 
 * [JGitFS](https://github.com/centic9/JGitFS): Displays Git branches, tags and commits as files
 * [GithubFS](https://github.com/akiellor/githubfs): Expose GitHub issues as files
+* [Java FUSE Mirror File System](https://github.com/Syed-Rahman-Mashwani/Java-FUSE-Mirror-File-System): Mirror filesystem stub implementation
 
 Feel free to [open an issue](https://github.com/EtiennePerot/fuse-jna/issues/new) to get your project added here.
 
@@ -63,6 +70,8 @@ JNA is licensed under the [LGPL v2.1].
 [SrcDemo²]: https://github.com/EtiennePerot/srcdemo2
 [fuse.py]: http://code.google.com/p/fusepy/source/browse/trunk/fuse.py
 [JNA]: https://github.com/twall/jna
+[JNI]: https://en.wikipedia.org/wiki/Java_Native_Interface
+[Issue 31]: https://github.com/EtiennePerot/fuse-jna/issues/31
 [MacFUSE]: http://code.google.com/p/macfuse/
 [fuse4x]: http://fuse4x.org/
 [OSXFUSE]: http://osxfuse.github.com/

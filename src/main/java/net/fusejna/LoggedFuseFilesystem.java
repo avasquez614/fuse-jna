@@ -35,6 +35,14 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 		className = filesystem.getClass().getName();
 	}
 
+	@FuseMethod
+	@Override
+	final void _destroy()
+	{
+		destroy();
+		_destroy(this, filesystem);
+	}
+
 	@Override
 	public int access(final String path, final int access)
 	{
@@ -70,19 +78,6 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 			public void invoke()
 			{
 				filesystem.beforeMount(mountPoint);
-			}
-		}, mountPoint.toString());
-	}
-
-	@Override
-	public void beforeUnmount(final File mountPoint)
-	{
-		log("beforeUnmount", new LoggedVoidMethod()
-		{
-			@Override
-			public void invoke()
-			{
-				filesystem.beforeUnmount(mountPoint);
 			}
 		}, mountPoint.toString());
 	}
@@ -181,7 +176,7 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 	@Override
 	public int fsync(final String path, final int datasync, final FileInfoWrapper info)
 	{
-		return log("flush", 0, new LoggedMethod<Integer>()
+		return log("fsync", 0, new LoggedMethod<Integer>()
 		{
 			@Override
 			public Integer invoke()
@@ -207,7 +202,7 @@ final class LoggedFuseFilesystem extends FuseFilesystem
 	@Override
 	public int ftruncate(final String path, final long offset, final FileInfoWrapper info)
 	{
-		return log("getattr", 0, new LoggedMethod<Integer>()
+		return log("ftruncate", 0, new LoggedMethod<Integer>()
 		{
 			@Override
 			public Integer invoke()
